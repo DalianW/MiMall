@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>尾部</div>
 </template>
 <script>
 export default{

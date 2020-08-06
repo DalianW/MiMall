@@ -1,8 +1,8 @@
 <template>
-  <div>订单列表</div>
+  <div>头部</div>
 </template>
 <script>
 export default{
-  name: 'orderList'
+  name: 'order-header'
 }
 </script>
