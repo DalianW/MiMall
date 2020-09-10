@@ -5,21 +5,17 @@
 </template>
 
 <script>
-import storage from './storage'
 export default {
   name: 'App',
   components: {},
   mounted() {
-    // storage.setItem('a', 1)
-    storage.setItem('abc', {a: 2}, 'user')
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+
+@import './assets/scss/reset.scss';
+@import './assets/scss/base.scss';
+
 </style>
