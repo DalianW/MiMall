@@ -59,13 +59,51 @@
 
       </div>
 
-      <div class="ads-box"></div>
+      <div class="ads-box">
+        <a :href="'/#/product/' + item.id" v-for="(item, index) in adsList" :key="index">
+          <img :src="item.img">
+        </a>
+      </div>
 
-      <div class="banner"></div>
+      <div class="banner">
+        <a href="/#/product/30">
+          <img src="/imgs/banner-1.png" alt="">
+        </a>
+      </div>
 
-      <div class="product-box"></div>
+      
       
     </div>
+
+    <div class="product-box">
+        <div class="container">
+
+          <h2>手机</h2>
+          <div class="wrapper">
+            <div class="banner-left">
+              <a href="/#/product/35">
+                <img src="/imgs/mix-alpha.jpg"> 
+              </a>
+            </div>
+            <div class="list-box">
+              <div class="list" v-for="(arr, index) in phoneList" :key="index">
+                <div class="item" v-for="(item, ind) in arr" :key="ind">
+                  <span class="new-pro" v-if="ind % 2 == 0">新品</span>
+                  <span class="kill-pro" v-else>秒杀</span>
+                  <div class="item-img">
+                    <img :src="item.mainImage">
+                  </div>
+                  <div class="item-info">
+                    <h6>{{item.name}}</h6>
+                    <p class="info">{{item.subtitle}}</p>
+                    <p class="price">{{item.price}}元</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <service-bar></service-bar>
   </div>
@@ -149,7 +187,30 @@ export default{
         ],
 
         
-      ]
+      ],
+    
+      adsList: [
+        {id: 33, img: '/imgs/ads/ads-1.png'},
+        {id: 48, img: '/imgs/ads/ads-2.jpg'},
+        {id: 45, img: '/imgs/ads/ads-3.png'},
+        {id: 47, img: '/imgs/ads/ads-4.jpg'},
+      ],
+      phoneList:[]
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      this.axios.get('/products', {
+        params: {
+          categoryId: 100012,
+          pageSize: 8
+        }
+      }).then( res => {
+        this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)]
+      })
     }
   }
 }
@@ -237,6 +298,116 @@ export default{
       img{
         width: 100%;
         height: 100%;
+      }
+    }
+  }
+
+  .ads-box{
+    margin: 14px 0 30px;
+    @include flex();
+    a{
+      display: block;
+      width:296px;
+      height: 167px;
+      img{
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .banner{
+    margin-bottom: 50px;
+    img{
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .product-box{
+    background:#f5f5f5;
+    padding:30px 0 50px;
+    h2{
+      font-size: 22px;
+      font-weight: bold;
+      height: 24px;
+      line-height: 24px;
+    }
+
+    .wrapper{
+      margin:20px 0;
+      display: flex;
+      .banner-left{
+        margin-right: 16px;
+        img{
+          display: block;
+          width:224px;
+          height: 619px;
+        }
+      }
+    }
+    .list-box{
+      .list{
+        @include flex();
+        width: 986px;
+        .item{
+          width:236px;
+          height: 302px;
+          background:#ffffff;
+          text-align: center;
+          span{
+            display: inline-block;
+            width: 67px;
+            height: 24px;
+            line-height: 24px;
+            font-size:14px;
+            color:#fff;
+            &.new-pro{
+              background-color:#7ECF68;
+            }
+            &.kill-pro{
+              background-color:#E82626;
+            }
+            
+          }
+          .item-img{
+            height: 195px;
+            @include flex(center, center);
+            img{
+              max-width: 100%;
+              max-height: 100%;
+            }
+          }
+          .item-info{
+            h6{
+              font-size:14px;
+              color:#333;
+              font-weight: bold;
+              line-height: 16px;
+            }
+            .info{
+              color:#999;
+              font-size:12px;
+              line-height: 14px;
+              margin:6px 0 8px;
+            }
+            .price{
+              color:#f60;
+              font-weight: bold;
+              font-size:16px;
+              &:after{
+                content: ' ';
+                @include bgImg(18px, 18px, '/imgs/icon-cart-hover.png');
+                vertical-align:middle;
+                margin:-2px 0 0 3px;
+              }
+            }
+          }
+        }
+        &:first-child{
+          margin-bottom:14px;
+        }
       }
     }
   }
