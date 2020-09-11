@@ -61,17 +61,15 @@
 
       <div class="ads-box">
         <a :href="'/#/product/' + item.id" v-for="(item, index) in adsList" :key="index">
-          <img :src="item.img">
+          <img v-lazy="item.img">
         </a>
       </div>
 
       <div class="banner">
         <a href="/#/product/30">
-          <img src="/imgs/banner-1.png" alt="">
+          <img v-lazy="'/imgs/banner-1.png'" alt="">
         </a>
       </div>
-
-      
       
     </div>
 
@@ -91,12 +89,12 @@
                   <span class="new-pro" v-if="ind % 2 == 0">新品</span>
                   <span class="kill-pro" v-else>秒杀</span>
                   <div class="item-img">
-                    <img :src="item.mainImage">
+                    <img v-lazy="item.mainImage">
                   </div>
                   <div class="item-info">
                     <h6>{{item.name}}</h6>
                     <p class="info">{{item.subtitle}}</p>
-                    <p class="price">{{item.price}}元</p>
+                    <p class="price" @click="addCart(item.id)">{{item.price}}元</p>
                   </div>
                 </div>
               </div>
@@ -106,21 +104,38 @@
       </div>
 
     <service-bar></service-bar>
+
+    <modal 
+    title="提示" 
+    sureText="查看购物车" 
+    btnType="3" 
+    modaType="middle" 
+    :showModal = "showModal" 
+    @submit="goToCart" 
+    @cancel="showModal = false"> 
+      <template v-slot:body>
+        <p>商品添加成功</p>
+      </template>
+      
+    </modal>
   </div>
 </template>
 <script>
 import ServiceBar from '../components/ServiceBar'
 import 'swiper/swiper-bundle.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import Modal from '../components/Modal'
 export default{
   name: 'index',
   components: {
     ServiceBar,
     swiper,
-    swiperSlide
+    swiperSlide,
+    Modal
   },
   data() {
     return {
+      showModal: false,
       swiperOption:{
         autoplay: true,
         loop: true,
@@ -211,6 +226,22 @@ export default{
       }).then( res => {
         this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)]
       })
+    },
+    addCart(id) {
+      this.showModal = true
+      console.log(id)
+      return
+      // this.axios.post('/carts', {
+      //   productId: id,
+      //   selected: true
+      // }).then( () => {
+
+      // }).catch( () => {
+      //   this.showModal = true
+      // })
+    },
+    goToCart() {
+      this.$router.push('/cart')
     }
   }
 }
