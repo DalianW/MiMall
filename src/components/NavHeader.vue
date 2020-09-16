@@ -10,6 +10,8 @@
         </div>
         <div class="topbaer-user">
           <a href="javascript:;" v-if="username">{{username}}</a>
+          <a href="javascript:;" v-if="username" @click="loginOut">退出</a>
+
           <a href="javascript:;" v-else @click="login">登录</a>
           <a href="javascript:;">我的订单</a>
           <a href="javascript:;" class="my-cart" @click="goToCart">
@@ -80,6 +82,9 @@ export default{
   },
   mounted() {
     this.getProductList()
+    if(this.$route.params && this.$route.params.from == 'login') {
+      this.getCarCout()
+    }
   },
   methods: {
     getProductList() {
@@ -93,11 +98,25 @@ export default{
        
       })
     },
+    loginOut() {
+      this.axios.post('/user/logout').then( () => { 
+        this.$message.success('退出成功！')
+        this.$cookie.set('userId', '', {expires: '-1'});
+        this.$store.dispatch('saveUserName', '')
+        this.$store.dispatch('saveCartCount', 0)
+       })
+    },
     goToCart() {
       this.$router.push('/cart')
     },
     login() {
       this.$router.push('/login')
+    },
+    getCarCout() {
+      this.axios.get('/carts/products/sum').then( (res = 0) => {
+        // to-do 保存到vuex里面
+       this.$store.dispatch('saveCartCount', res)
+      })
     }
   },
   filters: {
@@ -147,32 +166,6 @@ export default{
       position: relative;
       height: 112px;
       @include flex();
-      .header-logo{
-        display: inline-block;
-        width: 55px;
-        height: 55px;
-        background:#f60;
-        a{
-          display: inline-block;
-          width: 110px;
-          height: 55px;
-          &:before{
-            content: ' ';
-
-            @include bgImg(55px, 55px, '/imgs/mi-logo.png', 55px);
-            transition:margin ease .2s; 
-          }
-          &:after{
-            content: ' ';
-            @include bgImg(55px, 55px, '/imgs/mi-home.png', 55px);           
-            transition:margin ease .2s; 
-          }
-          &:hover::before{
-            margin-left: -55px;
-          }
-        }
-      }
-
       .header-menu{
         width:643px;
         padding-left:209px;

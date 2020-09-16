@@ -107,8 +107,8 @@
 
     <modal 
     title="提示" 
-    sureText="查看购物车" 
-    btnType="3" 
+    sureText="确定" 
+    btnType="1" 
     modaType="middle" 
     :showModal = "showModal" 
     @submit="goToCart" 
@@ -229,16 +229,16 @@ export default{
     },
     addCart(id) {
       this.showModal = true
-      console.log(id)
-      return
-      // this.axios.post('/carts', {
-      //   productId: id,
-      //   selected: true
-      // }).then( () => {
+      this.axios.post('/carts', {
+        productId: id,
+        selected: true
+      }).then( (res) => {
+        this.showModal = true
+        this.$store.dispatch('saveCartCount', res.cartTotalQuantity)
 
-      // }).catch( () => {
-      //   this.showModal = true
-      // })
+      }).catch( () => {
+        this.showModal = true
+      })
     },
     goToCart() {
       this.$router.push('/cart')

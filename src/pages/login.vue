@@ -57,18 +57,24 @@ export default {
         password
       }).then( (res) => {
         this.userInfo = res
-        this.$cookie.set('userId', res.id, {expires: '1M'})
+        this.$cookie.set('userId', res.id, {expires: 'Session'})
         // this.$store.dispatch('saveUserName', res.username)
         this.saveUserName(res.username)
-        this.$router.push('/index')
+        // this.$router.push('/index')
+        this.$router.push({
+          name: 'index',
+          params: {
+            from: 'login'
+          }
+        })
       })
     },
     ...mapActions(['saveUserName']),
     register() {
       this.axios.post('/user/register', {
-        username: 'admin',
-        password: 'admin',
-        email: 'admin@163.com'
+        username: this.username,
+        password: this.password,
+        email: 'liancat@163.com'
       }).then( (res) => {
         alert('注册成功！')
         console.log(res)
